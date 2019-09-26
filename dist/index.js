@@ -108,10 +108,12 @@ var calculatePercentage = function calculatePercentage(loaded, total) {
   return Math.floor(loaded * 1.0) / total;
 };
 
-function loadProgressBar(config) {
+function loadProgressBar() {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var instance = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _axios2.default;
 
   var requestsCounter = 0;
+  config.delay = config.delay !== undefined ? config.delay : 200;
 
   var setupStartProgress = function setupStartProgress() {
     instance.interceptors.request.use(function (config) {
@@ -134,7 +136,7 @@ function loadProgressBar(config) {
       if (--requestsCounter === 0) {
         setTimeout(function () {
           _nprogress2.default.done();
-        }, 200);
+        }, config.delay);
       }
       return response;
     };
@@ -143,7 +145,7 @@ function loadProgressBar(config) {
       if (--requestsCounter === 0) {
         setTimeout(function () {
           _nprogress2.default.done();
-        }, 200);
+        }, config.delay);
       }
       return Promise.reject(error);
     };

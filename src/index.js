@@ -5,8 +5,9 @@ import axios from 'axios'
 
 const calculatePercentage = (loaded, total) => (Math.floor(loaded * 1.0) / total)
 
-export function loadProgressBar (config, instance = axios) {
+export function loadProgressBar (config = {}, instance = axios) {
   let requestsCounter = 0
+  config.delay = config.delay !== undefined ? config.delay : 200
 
   const setupStartProgress = () => {
     instance.interceptors.request.use(config => {
@@ -25,14 +26,14 @@ export function loadProgressBar (config, instance = axios) {
   const setupStopProgress = () => {
     const responseFunc = response => {
       if ((--requestsCounter) === 0) {
-        setTimeout(() => {NProgress.done()}, 200);
+        setTimeout(() => {NProgress.done()}, config.delay);
       }
       return response
     }
 
     const errorFunc = error => {
       if ((--requestsCounter) === 0) {
-        setTimeout(() => {NProgress.done()}, 200);
+        setTimeout(() => {NProgress.done()}, config.delay);
       }
       return Promise.reject(error)
     }
