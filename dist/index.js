@@ -114,12 +114,28 @@ function loadProgressBar() {
 
   var requestsCounter = 0;
   config.delay = config.delay !== undefined ? config.delay : 200;
+  config.autoStart = config.autoStart !== undefined ? config.autoStart : true;
+
+  var isStarted = false;
+  var start = function start() {
+    _nprogress2.default.start();
+    isStarted = true;
+  };
+
+  var done = function done(force) {
+    setTimeout(function () {
+      isStarted = false;
+      _nprogress2.default.done(force);
+    }, config.delay);
+  };
 
   var setupStartProgress = function setupStartProgress() {
-    instance.interceptors.request.use(function (config) {
+    instance.interceptors.request.use(function (axiosConfig) {
       requestsCounter++;
-      _nprogress2.default.start();
-      return config;
+      if (config.autoStart) {
+        start();
+      }
+      return axiosConfig;
     });
   };
 
@@ -127,25 +143,23 @@ function loadProgressBar() {
     var update = function update(e) {
       return _nprogress2.default.inc(calculatePercentage(e.loaded, e.total));
     };
-    instance.defaults.onDownloadProgress = update;
-    instance.defaults.onUploadProgress = update;
+    if (isStarted) {
+      instance.defaults.onDownloadProgress = update;
+      instance.defaults.onUploadProgress = update;
+    }
   };
 
   var setupStopProgress = function setupStopProgress() {
     var responseFunc = function responseFunc(response) {
       if (--requestsCounter === 0) {
-        setTimeout(function () {
-          _nprogress2.default.done();
-        }, config.delay);
+        done();
       }
       return response;
     };
 
     var errorFunc = function errorFunc(error) {
       if (--requestsCounter === 0) {
-        setTimeout(function () {
-          _nprogress2.default.done();
-        }, config.delay);
+        done();
       }
       return Promise.reject(error);
     };
