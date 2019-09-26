@@ -1,7 +1,7 @@
 {
-  "name": "axios-progress-bar",
-  "version": "1.2.0",
-  "description": "Slim progress bar (NProgress) for Web applications that use Axios library for HTTP requests.",
+  "name": "@trengo/axios-progress-bar",
+  "version": "1.2.1",
+  "description": "A fork. Slim progress bar (NProgress) for Web applications that use Axios library for HTTP requests.",
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack --progress",
@@ -9,11 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rikmms/progress-bar-4-axios.git"
+    "url": "https://github.com/rleroi/progress-bar-4-axios.git"
   },
-  "author": "rikmms <sousa.ricardo10@gmail.com>",
+  "author": "rleroi <info@itbazen.com>",
   "license": "MIT",
   "keywords": [
+    "trengo",
     "axios",
     "http",
     "progress",

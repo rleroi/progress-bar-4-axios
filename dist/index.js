@@ -132,14 +132,18 @@ function loadProgressBar(config) {
   var setupStopProgress = function setupStopProgress() {
     var responseFunc = function responseFunc(response) {
       if (--requestsCounter === 0) {
-        _nprogress2.default.done();
+        setTimeout(function () {
+          _nprogress2.default.done();
+        }, 200);
       }
       return response;
     };
 
     var errorFunc = function errorFunc(error) {
       if (--requestsCounter === 0) {
-        _nprogress2.default.done();
+        setTimeout(function () {
+          _nprogress2.default.done();
+        }, 200);
       }
       return Promise.reject(error);
     };
